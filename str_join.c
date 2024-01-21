@@ -72,6 +72,7 @@ void test_join() {
     const char* list7[] = { "a", "b", "", NULL };
     result = str_join(list7, "123");
     assert(strcmp(result, "a123b123") == 0);
+    free(result);
 
     const char* list8[] = { "", "b", "c", NULL };
     result = str_join(list8, "123");
