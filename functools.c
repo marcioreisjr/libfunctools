@@ -49,8 +49,7 @@ ObjList map_data(MapDataFn fn, const void* input, size_t el_len, size_t el_count
     size_t j = 0; // index of the current element
     unsigned char* ix = (unsigned char*)input;
     while (j < el_count) {
-        out[j] = malloc(el_len);
-        memcpy(out[j], fn((void*)&ix[j * el_len], j), el_len);
+        out[j] = fn((void*)&ix[j * el_len], j);
         j++;
     }
     out[j] = NULL;
@@ -67,8 +66,11 @@ void* reduce_data(ReduceDataFn fn, const void* input,
     }
     size_t j = 0; // index of the current element
     unsigned char* ix = (unsigned char*)input;
+    void* tmp;
     while (j < el_count) {
-        init = fn(init, (void*)&ix[j * el_len], j);
+        tmp = fn(init, (void*)&ix[j * el_len], j);
+        free(init);
+        init = tmp;
         j++;
     }
     return init;
@@ -118,8 +120,11 @@ void* reduce(ReduceDataFn fn, ObjList input, void* init) {
         return NULL;
     }
     size_t i = 0;
+    void* tmp;
     for (i = 0; input[i] != NULL; i++) {
-        init = fn(init, input[i], i);
+        tmp = fn(init, input[i], i);
+        free(init);
+        init = tmp;
     }
     return init;
 }
@@ -246,8 +251,8 @@ void test_map() {
     assert(*output[3] == 64);
     assert(*output[4] == 125);
     assert(output[5] == NULL);
-    free(output); // let next free_list() free the rest
-    free_list((ObjList)input, 5);
+    free_list((ObjList)output, 0);
+    free_list((ObjList)input, 0);
 }
 
 
@@ -267,7 +272,7 @@ void test_reduce() {
     int* output = (int*)reduce(&sum, (ObjList)input, NULL);
     assert(*output == 15);
     free(output);
-    free_list((ObjList)input, 5);
+    free_list((ObjList)input, 0);
 }
 
 
