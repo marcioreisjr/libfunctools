@@ -63,7 +63,7 @@ int main() {
 }
 ```
 
-### `filter`
+### `filter_data`
 ```c
 ObjList filter_data(FilterDataFn fn, const void* input, size_t el_len, size_t el_count);
 ```
@@ -95,9 +95,9 @@ int main() {
 }
 ```
 
-### `reduce`
+### `reduce_data`
 ```c
-void* reduce(ReduceFn fn, const void* input, size_t el_len, size_t el_count, const void* init);
+void* reduce_data(ReduceFn fn, const void* input, size_t el_len, size_t el_count, const void* init);
 ```
 This function reduces an array of elements.
 
