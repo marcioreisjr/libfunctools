@@ -350,3 +350,65 @@ int main() {
     return 0;
 }
 ```
+
+### `str_contains`
+```c
+int str_contains(const char* str, char character);
+```
+This function checks if a string contains a character.
+
+#### Parameters
+- `str`: The string to check.
+- `character`: The character to check for.
+
+#### Return Value
+1 if the string contains the character, 0 otherwise.
+
+#### Example
+```c
+int main() {
+    assert(str_contains("abc", 'a'));
+    assert(str_contains("abc", 'b'));
+    assert(str_contains("abc", 'c'));
+    assert(!str_contains("", 'a'));
+    assert(!str_contains(NULL, 'a'));
+    assert(!str_contains("abc", '\0'));
+    assert(!str_contains("abc", 'd'));
+    return 0;
+}
+```
+
+### `str_set`
+```c
+char* str_set(const char* letters);
+```
+This function creates a set of characters from a string.
+
+#### Parameters
+- `letters`: The string to create a set from.
+
+#### Return Value
+A pointer to the set of characters.
+
+#### Example
+```c
+int main() {
+    // Test NULL and empty string
+    char* ret = str_set(NULL);
+    assert(!ret);
+    ret = str_set("");
+    assert(ret);
+    assert(strlen(ret) == 0);
+    free(ret); // free the empty string
+    // Test a few strings
+    ret = str_set("abcabc");
+    assert(ret);
+    assert(strlen(ret) == 3);
+    assert(str_contains(ret, 'a'));
+    assert(str_contains(ret, 'b'));
+    assert(str_contains(ret, 'c'));
+    assert(!str_contains(ret, 'd'));
+    free(ret); // free the test string
+    return 0;
+}
+```
